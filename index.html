@@ -7,11 +7,20 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Tic Tac Toe</title>
   <link type="text/css" rel="stylesheet" href="style.css">
-  <script src="main.js"></script>
 </head>
 
 <body>
   <h2>Tic Tac Toe</h2>
+  <h3>Waiting for game...</h3>
+  <form>
+    <label>X:
+      <input id='player-1' value='Player 1'>
+    </label>
+    <label>O:
+      <input id='player-2' value='Player 2'>
+    </label>
+  </form>
+  <button onclick='play()'>Start</button>
   <div class="board">
     <div id="row-1">
       <div id="cell-0"></div>
@@ -30,7 +39,7 @@
     </div>
   </div>
 
-
+  <script src='main.js'></script>
 
 </body>
 
