@@ -54,6 +54,8 @@ div.board {
   overflow: hidden;
   margin: 0 auto;
   line-height: 200px;
+  font-size: 75px;
+  font-weight: bold;
 }
 
 #x {

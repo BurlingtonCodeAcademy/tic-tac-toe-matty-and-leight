@@ -3,6 +3,7 @@ class TicTacToe {
     this.turn;
     this.currentPlayer;
     this.players;
+    this.moves = 0;
   }
 
   winCheck() {
@@ -24,16 +25,26 @@ class TicTacToe {
       document.querySelector("h3").textContent = `${this.currentPlayer} Wins!`;
       return true;
     }
+    if (this.moves === 9) {
+      document.querySelector("h3").textContent = `The game ended in a draw!`
+      return true;
+    }
     return false;
   }
 
   boardState(boardArray, firstCell, secondCell, thirdCell) {
-    if (
-      boardArray[firstCell] === this.turn &&
-      boardArray[secondCell] === this.turn &&
-      boardArray[thirdCell] === this.turn
-    ) {
-      return true;
+    let turns = ["X", "O"];
+    for (let turn of turns) {
+      if (
+        boardArray[firstCell] === turn &&
+        boardArray[secondCell] === turn &&
+        boardArray[thirdCell] === turn
+      ) {
+        document.getElementById(`cell-${firstCell}`).textContent = '🖕'
+        document.getElementById(`cell-${secondCell}`).textContent = '🖕'
+        document.getElementById(`cell-${thirdCell}`).textContent = '🖕'
+        return true;
+      }
     }
   }
 
@@ -42,7 +53,10 @@ class TicTacToe {
       X: document.getElementById("player-1").value,
       O: document.getElementById("player-2").value
     };
-    if (Math.round(Math.random()) === 0) {
+    if (document.getElementById("computer").checked) {
+      this.currentPlayer = this.players.X;
+      this.turn = "X";
+    } else if (Math.round(Math.random()) === 0) {
       this.currentPlayer = this.players.X;
       this.turn = "X";
     } else {
@@ -52,20 +66,6 @@ class TicTacToe {
 
     document.querySelector("h3").textContent = `Ready ${this.currentPlayer}`;
   }
-
-  computer() {
-    document.getElementById("player-2").value = "Computer";
-      if (this.turn === "O") {
-        let randomCell = document.getElementById(
-          `cell-${Math.floor(Math.random() * 9)}`
-        )
-        randomCell.textContent = this.turn;
-          console.log('function call')
-          console.log(randomCell)
-        console.log('computer turn')
-        this.toggle();
-      }
-    }
 
   toggle() {
     if (this.turn === "X") {
@@ -77,6 +77,26 @@ class TicTacToe {
       this.currentPlayer = this.players.X;
       document.querySelector("h3").textContent = `Ready ${this.currentPlayer}`;
     }
+    return this.turn;
+  }
+
+  chooseCell() {
+    if (this.moves >= 8) {
+      return;
+    } else if (document.getElementById("cell-4").textContent === '') {
+      document.getElementById("cell-4").textContent = this.turn;
+    } else {
+      let randomCell = document.getElementById(
+        `cell-${Math.floor(Math.random() * 9)}`
+      );
+      while (randomCell.textContent !== "") {
+        randomCell = document.getElementById(
+          `cell-${Math.floor(Math.random() * 9)}`
+        );
+      }
+      randomCell.textContent = this.turn;
+    }
+    this.moves++;
   }
 
   setCell(cell) {
@@ -85,13 +105,20 @@ class TicTacToe {
       return;
     }
     cell.textContent = this.turn;
+    this.moves++;
     if (this.winCheck()) {
       this.turn = "";
       return;
     }
     if (document.getElementById("computer").checked) {
-      this.computer();
+      this.toggle();
+      this.chooseCell();
+      if (this.winCheck()) {
+        this.turn = "";
+        return;
+      }
     }
+    this.toggle();
   }
 }
 
