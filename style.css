@@ -1,22 +1,4 @@
-body {
-  background-color: rgb(255, 255, 255);
-  width: 1000px;
-  margin: 10px auto;
-  text-align: center;
-  padding: 10px;
-  user-select: none;
-}
 
-h2 {
-  font-size: 30px;
-  text-align: center;
-  height: 75px;
-}
-
-span{
-  font-size: 75px;
-  margin-top: 20px;
-}
 
 div[id^="row-"] div {
   width: 200px;
