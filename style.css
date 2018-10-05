@@ -1,11 +1,28 @@
+body {
+  background-color: rgb(255, 255, 255);
+  width: 1000px;
+  margin: 10px auto;
+  text-align: center;
+  padding: 10px;
+  user-select: none;
+}
 
+h2 {
+  font-size: 30px;
+  text-align: center;
+  height: 75px;
+}
+
+span{
+  font-size: 75px;
+  margin-top: 20px;
+}
 
 div[id^="row-"] div {
   width: 200px;
   height: 200px;
   border: 1px solid red;
   float: left;
-  line-height: 200px;
 
 }
 
@@ -36,4 +53,12 @@ div.board {
   width: 608px;
   overflow: hidden;
   margin: 0 auto;
+  line-height: 200px;
+}
+
+#x {
+  margin-top: 38px;
+}
+#o {
+  margin-top: 38px;
 }
