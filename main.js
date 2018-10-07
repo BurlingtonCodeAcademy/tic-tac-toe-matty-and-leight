@@ -1,124 +1,122 @@
 class TicTacToe {
   constructor() {
-    this.turn;
-    this.currentPlayer;
-    this.players;
-    this.moves = 0;
+    this.board = Array(9).fill("");
+    this.status = "waiting";
+    this.setCell = this.setCell.bind(this);
+    this.start = this.start.bind(this);
   }
 
-  winCheck() {
-    let boardArray = [];
-    for (let i = 0; i <= 8; i++) {
-      let cell = document.getElementById(`cell-${i}`);
-      boardArray.push(cell.textContent);
-    }
+  toggle(turn) {
+    return (this.turn = turn === "X" ? "O" : "X");
+  }
+
+  gameOver(board) {
     if (
-      this.boardState(boardArray, 0, 1, 2) ||
-      this.boardState(boardArray, 3, 4, 5) ||
-      this.boardState(boardArray, 6, 7, 8) ||
-      this.boardState(boardArray, 0, 4, 8) ||
-      this.boardState(boardArray, 2, 4, 6) ||
-      this.boardState(boardArray, 0, 3, 6) ||
-      this.boardState(boardArray, 1, 4, 7) ||
-      this.boardState(boardArray, 2, 5, 8)
+      this.boardState(board, 0, 1, 2) ||
+      this.boardState(board, 3, 4, 5) ||
+      this.boardState(board, 6, 7, 8) ||
+      this.boardState(board, 0, 4, 8) ||
+      this.boardState(board, 2, 4, 6) ||
+      this.boardState(board, 0, 3, 6) ||
+      this.boardState(board, 1, 4, 7) ||
+      this.boardState(board, 2, 5, 8)
     ) {
-      document.querySelector("h3").textContent = `${this.currentPlayer} Wins!`;
-      return true;
-    }
-    if (this.moves === 9) {
-      document.querySelector("h3").textContent = `The game ended in a draw!`
-      return true;
+      this.turn = ``;
+      return (this.status = `win`);
+    } else if (!board.includes("")) {
+      this.turn = ``;
+      return (this.status = `scratch`);
     }
     return false;
   }
 
-  boardState(boardArray, firstCell, secondCell, thirdCell) {
+  boardState(board, firstCell, secondCell, thirdCell) {
     let turns = ["X", "O"];
     for (let turn of turns) {
       if (
-        boardArray[firstCell] === turn &&
-        boardArray[secondCell] === turn &&
-        boardArray[thirdCell] === turn
+        board[firstCell] === turn &&
+        board[secondCell] === turn &&
+        board[thirdCell] === turn
       ) {
-        document.getElementById(`cell-${firstCell}`).textContent = '🖕'
-        document.getElementById(`cell-${secondCell}`).textContent = '🖕'
-        document.getElementById(`cell-${thirdCell}`).textContent = '🖕'
         return true;
       }
     }
   }
 
-  start() {
+  start(playerX, playerO, opponent) {
+    this.board = Array(9).fill("");
     this.players = {
-      X: document.getElementById("player-1").value,
-      O: document.getElementById("player-2").value
+      X: playerX,
+      O: playerO
     };
-    if (document.getElementById("computer").checked) {
-      this.currentPlayer = this.players.X;
+    if (opponent === `computer`) {
       this.turn = "X";
-    } else if (Math.round(Math.random()) === 0) {
-      this.currentPlayer = this.players.X;
-      this.turn = "X";
-    } else {
-      this.currentPlayer = this.players.O;
-      this.turn = "O";
+    } else if (opponent === `human`) {
+      if (Math.round(Math.random()) === 0) {
+        this.turn = "X";
+      } else {
+        this.turn = "O";
+      }
     }
-
-    document.querySelector("h3").textContent = `Ready ${this.currentPlayer}`;
-  }
-
-  toggle() {
-    if (this.turn === "X") {
-      this.turn = "O";
-      this.currentPlayer = this.players.O;
-      document.querySelector("h3").textContent = `Ready ${this.currentPlayer}`;
-    } else if (this.turn === "O") {
-      this.turn = "X";
-      this.currentPlayer = this.players.X;
-      document.querySelector("h3").textContent = `Ready ${this.currentPlayer}`;
-    }
+    this.status = `${this.turn} Turn`;
     return this.turn;
   }
 
-  chooseCell() {
-    if (this.moves >= 8) {
-      return;
-    } else if (document.getElementById("cell-4").textContent === '') {
-      document.getElementById("cell-4").textContent = this.turn;
+  chooseCell(board, turn) {
+    let centerCell = 4;
+    if (!board.includes("")) {
+      throw Error(`Board is full.`);
+    } else if (!board[centerCell]) {
+      this.board[centerCell] = turn;
+      return this.board;
     } else {
-      let randomCell = document.getElementById(
-        `cell-${Math.floor(Math.random() * 9)}`
-      );
-      while (randomCell.textContent !== "") {
-        randomCell = document.getElementById(
-          `cell-${Math.floor(Math.random() * 9)}`
-        );
+      let randomCell = Math.floor(Math.random() * 9);
+      while (board[randomCell]) {
+        randomCell = Math.floor(Math.random() * 9);
       }
-      randomCell.textContent = this.turn;
+      this.board[randomCell] = turn;
+      return this.board;
     }
-    this.moves++;
   }
 
-  setCell(cell) {
-    if (cell.textContent !== "") {
+  setCell(board, cellIndex, turn, opponent) {
+    if (board[cellIndex]) {
       alert("Impossible! That cell is already full.");
-      return;
+      return this.board;
     }
-    cell.textContent = this.turn;
-    this.moves++;
-    if (this.winCheck()) {
-      this.turn = "";
-      return;
+    this.board[cellIndex] = turn;
+    if (this.gameOver(board)) {
+      return this.board;
     }
-    if (document.getElementById("computer").checked) {
-      this.toggle();
-      this.chooseCell();
-      if (this.winCheck()) {
-        this.turn = "";
-        return;
+    if (opponent === "computer") {
+      turn = this.toggle(turn);
+      this.chooseCell(board, turn);
+      if (this.gameOver(board)) {
+        return this.board;
       }
     }
-    this.toggle();
+    turn = this.toggle(turn);
+    return this.board;
+  }
+
+  addListeners() {
+    let opponent = document.getElementById(`computer`).checked
+      ? "computer"
+      : "human";
+    for (let i = 0; i < 9; i++) {
+      let cell = document.getElementById(`cell-${i}`);
+      cell.onclick = () => {
+        this.setCell(this.board, i, this.turn, opponent);
+      };
+      this.start();
+    }
+  }
+
+    render() {
+      for (let i = 0; i < 9; i++) {
+        let cell = document.getElementById(`cell-${i}`);
+        cell.textContent = 4
+    }
   }
 }
 
