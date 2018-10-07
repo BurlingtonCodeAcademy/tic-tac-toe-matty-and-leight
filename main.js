@@ -1,13 +1,12 @@
 class TicTacToe {
   constructor() {
     this.board = Array(9).fill("");
-    this.status = "waiting";
-    this.setCell = this.setCell.bind(this);
-    this.start = this.start.bind(this);
   }
 
   toggle(turn) {
-    return (this.turn = turn === "X" ? "O" : "X");
+    this.turn = turn === "X" ? "O" : "X";
+    this.status = `${this.turn} Turn`;
+    return this.turn;
   }
 
   gameOver(board) {
@@ -90,33 +89,13 @@ class TicTacToe {
     }
     if (opponent === "computer") {
       turn = this.toggle(turn);
-      this.chooseCell(board, turn);
+      this.chooseCell(this.board, turn);
       if (this.gameOver(board)) {
         return this.board;
       }
     }
     turn = this.toggle(turn);
     return this.board;
-  }
-
-  addListeners() {
-    let opponent = document.getElementById(`computer`).checked
-      ? "computer"
-      : "human";
-    for (let i = 0; i < 9; i++) {
-      let cell = document.getElementById(`cell-${i}`);
-      cell.onclick = () => {
-        this.setCell(this.board, i, this.turn, opponent);
-      };
-      this.start();
-    }
-  }
-
-    render() {
-      for (let i = 0; i < 9; i++) {
-        let cell = document.getElementById(`cell-${i}`);
-        cell.textContent = 4
-    }
   }
 }
 
