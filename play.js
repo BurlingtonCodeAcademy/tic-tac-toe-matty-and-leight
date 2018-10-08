@@ -1,6 +1,6 @@
 const game = new TicTacToe();
 
-render = board => {
+let render = board => {
   for (let i = 0; i < 9; i++) {
     let cell = document.getElementById(`cell-${i}`);
     cell.textContent = board[i];
@@ -8,7 +8,7 @@ render = board => {
   document.querySelector('h3').textContent = game.status;
 }
 
-addListeners = () => {
+let addListeners = () => {
   let opponent = document.getElementById(`computer`).checked
     ? "computer"
     : "human";
