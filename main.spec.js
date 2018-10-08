@@ -87,6 +87,11 @@ describe("TicTacToe", () => {
     expect(result).toMatch(/[XO]/);
   })
 
+  it(`start(): if human is selected, random goes first`, () => {
+    let result = game.start(`player1`, `player2`, `human`);
+    expect(result).toMatch(/[XO]/);
+  })
+
   it(`chooseCell(): choose center if available`, () => {
     game.board = ["", "", "", "", "", "", "", "", ""];
     let result = game.chooseCell(game.board, `O`);
@@ -148,5 +153,11 @@ describe("TicTacToe", () => {
     game.board = ["X", "X", "", "", "", "", "", "", ""];
     let result = game.setCell(game.board, 2, `X`, 'computer');
     expect(result).toEqual(["X", "X", "X", "", "", "", "", "", ""]);
+  })
+
+  it(`setCell(): computer chooses last space`, () => {
+    game.board = ["O", "X", "O", "O", "X", "X", "X", "", ""];
+    let result = game.setCell(game.board, 8, `X`, 'computer');
+    expect(result).toEqual(["O", "X", "O", "O", "X", "X", "X", "O", "X"]);
   })
 });
