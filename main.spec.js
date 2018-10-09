@@ -82,14 +82,22 @@ describe("TicTacToe", () => {
     expect(result).toBe("X");
   })
 
-  it(`start(): if human is selected, random goes first`, () => {
+  it(`start(): if human is selected, sometimes X goes first`, () => {
+    game.nextRandom = () => 0.3;
     let result = game.start(`player1`, `player2`, `human`);
-    expect(result).toMatch(/[XO]/);
+    expect(result).toMatch(/[X]/);
   })
 
-  it(`start(): if human is selected, random goes first`, () => {
+  it(`start(): if human is selected, sometimes O goes first`, () => {
+    game.nextRandom = () => 0.7; 
     let result = game.start(`player1`, `player2`, `human`);
-    expect(result).toMatch(/[XO]/);
+    expect(result).toMatch(/[O]/);
+  })
+
+  it(`start(): if unknown player is selected, we fail`, () => {
+    expect(
+      () => { game.start(`player1`, `player2`, `dog`); }
+    ).toThrow()
   })
 
   it(`chooseCell(): choose center if available`, () => {

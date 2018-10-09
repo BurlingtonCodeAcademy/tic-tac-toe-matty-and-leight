@@ -4,5 +4,8 @@
   },
   "dependencies": {
     "alert-node": "^1.2.2"
+  },
+  "scripts": {
+    "test": "jest"
   }
 }

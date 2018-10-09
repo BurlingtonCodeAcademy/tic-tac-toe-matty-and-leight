@@ -42,6 +42,10 @@ class TicTacToe {
     }
   }
 
+  nextRandom() {
+    return Math.random();
+  }
+
   start(playerX, playerO, opponent) {
     this.board = Array(9).fill("");
     this.players = {
@@ -51,11 +55,13 @@ class TicTacToe {
     if (opponent === `computer`) {
       this.turn = "X";
     } else if (opponent === `human`) {
-      if (Math.random() < 0.5) {
+      if (this.nextRandom() < 0.5) {
         this.turn = "X";
       } else {
         this.turn = "O";
       }
+    } else {
+      throw new Error("opponent must be either computer or human, but was " + opponent);
     }
     this.status = `${this.turn} Turn`;
     return this.turn;
@@ -69,9 +75,9 @@ class TicTacToe {
       this.board[centerCell] = turn;
       return this.board;
     } else {
-      let randomCell = Math.floor(Math.random() * 9);
+      let randomCell = Math.floor(this.nextRandom() * 9);
       while (board[randomCell]) {
-        randomCell = Math.floor(Math.random() * 9);
+        randomCell = Math.floor(this.nextRandom() * 9);
       }
       this.board[randomCell] = turn;
       return this.board;
